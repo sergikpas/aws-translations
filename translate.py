@@ -57,13 +57,12 @@ for idx in source.keys():
     if idx not in dest.keys() or len(dest[idx]) == 0:
         for_translation[idx] = source[idx]
 
-
 # calculate similarity
 i = 0
 delete = []
 for idx, sentence in for_translation.items():
     res = calc_similarity(source, sentence, idx)
-    if res[0] > 0.97:
+    if res[0] >= 0.97 and res[2] in dest.keys() and len(dest[res[2]]) > 0:
         dest[idx] = dest[res[2]]
         delete.append(idx)
 
@@ -81,17 +80,14 @@ for idx, sentence in for_translation.items():
     for_translation[idx] = text['TranslatedText']
     dest[idx] = text['TranslatedText']
 
-with open('source.json', 'w', encoding='utf-8') as fsource:
-    # json.dump(dest, ftranslation, ensure_ascii=False)
 
+with open('source.json', 'w', encoding='utf-8') as fsource:
     for idx, sentence in source.items():
         fsource.write('%s:"%s"\n' % (idx, sentence))
     fsource.close()
 
-
 with open(args['to'], "r", encoding='utf-8') as file:
     data = json.load(file)
-with open('translation_tree.json', 'w', encoding='utf-8') as fnew_tree:
-
-    dest = json_dict_to.translate_tree("", data, for_translation)
-    json.dump(dest, fnew_tree, ensure_ascii=False, indent=4)
+with open(args['to'], 'w', encoding='utf-8') as fnew_tree:
+    translation = json_dict_to.translate_tree("", data, dest)
+    json.dump(translation, fnew_tree, ensure_ascii=False, indent=4)
