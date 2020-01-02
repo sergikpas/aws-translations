@@ -80,11 +80,12 @@ for idx, sentence in for_translation.items():
     for_translation[idx] = text['TranslatedText']
     dest[idx] = text['TranslatedText']
 
-
+'''
 with open('source.json', 'w', encoding='utf-8') as fsource:
     for idx, sentence in source.items():
         fsource.write('%s:"%s"\n' % (idx, sentence))
     fsource.close()
+'''
 
 with open(args['to'], "r", encoding='utf-8') as file:
     data = json.load(file)
