@@ -92,3 +92,4 @@ with open(args['to'], "r", encoding='utf-8') as file:
 with open(args['to'], 'w', encoding='utf-8') as fnew_tree:
     translation = json_dict_to.translate_tree("", data, dest)
     json.dump(translation, fnew_tree, ensure_ascii=False, indent=4)
+    print ("File %s successfully translated" % args['to'])
