@@ -36,6 +36,8 @@ parser.add_argument('--to',
                     help='JSON file where should be saved translation', required=True)
 parser.add_argument('--language',
                     help='language code (sv, en, ru, es etc.)', required=True)
+parser.add_argument('--terminology',
+                    help='Terminology that you can use for translations')
 parser.add_argument('--profile',
                     help='AWS profile that will be used for translation')
 
@@ -73,9 +75,13 @@ for idx in delete:
 session = boto3.Session(profile_name=args['profile'])
 translate = session.client('translate')
 
+terminology = []
+if args['terminology']:
+    terminology=[term for term in args['terminology'].split(',')]
+
 for idx, sentence in for_translation.items():
     text = translate.translate_text(
-        Text=sentence, SourceLanguageCode='en', TargetLanguageCode=args['language']
+        Text=sentence, SourceLanguageCode='en', TerminologyNames=terminology, TargetLanguageCode=args['language']
     )
     for_translation[idx] = text['TranslatedText']
     dest[idx] = text['TranslatedText']
